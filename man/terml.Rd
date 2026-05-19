@@ -87,7 +87,7 @@ integer values and coherence is ensured via a bottom-up adjustment.
 \itemize{
 \item \link{terml} returns a temporal reconciled forecast vector with the same
 dimensions, along with attributes containing the fitted model and
-reconciliation settings (see, \link[FoReco:recoinfo]{FoReco::recoinfo} and
+reconciliation settings (see, \link[FoReco:foreco-class]{FoReco::new_foreco_class} and
 \link{extract_reconciled_ml}).
 }
 

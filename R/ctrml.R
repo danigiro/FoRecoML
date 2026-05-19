@@ -75,7 +75,7 @@
 #' @returns
 #'   - [ctrml] returns a cross-temporal reconciled forecast matrix with the
 #'   same dimensions, along with attributes containing the fitted model and
-#'   reconciliation settings (see, [FoReco::recoinfo] and
+#'   reconciliation settings (see, [FoReco::new_foreco_class] and
 #'   [extract_reconciled_ml]).
 #'
 #' @references
@@ -452,16 +452,32 @@ ctrml <- function(
     tew = tew
   )
 
-  attr(reco_mat, "FoReco") <- new_foreco_info(list(
-    fit = obj,
-    framework = "Cross-temporal",
-    forecast_horizon = h,
-    te_set = tmp$set,
-    cs_n = tmp$dim[["n"]],
+  # attr(reco_mat, "FoReco") <- new_foreco_info(list(
+  #   fit = obj,
+  #   framework = "Cross-temporal",
+  #   forecast_horizon = h,
+  #   te_set = tmp$set,
+  #   cs_n = tmp$dim[["n"]],
+  #   rfun = "ctrml",
+  #   ml = approach
+  # ))
+  # return(reco_mat)
+
+  reco_mat <- .drop_foreco(reco_mat)
+  return(new_foreco_class(
+    reco_mat,
+    framework = "cross-temporal",
     rfun = "ctrml",
-    ml = approach
+    rtype = "point",
+    rinfo = list(
+      ml = approach,
+      forecast_horizon = h,
+      te_set = tmp$set,
+      cs_n = tmp$dim[["n"]],
+      fit = obj,
+      nn = all(!(reco_mat < 0))
+    )
   ))
-  return(reco_mat)
 }
 
 #' @usage

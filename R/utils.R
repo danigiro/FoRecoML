@@ -1,4 +1,4 @@
-#' Extract the reconciled model from a reconciliation result
+#' Extract the Reconciled Model from a Reconciliation Results
 #'
 #' @description
 #' Extract the fitted reconciled model(s) from a reconciliation
@@ -47,7 +47,8 @@
 #'   rnorm(length(ts_mean)*h, mean = ts_mean),
 #'   h, byrow = TRUE)
 #' colnames(base) <- unlist(dimnames(agg_mat))
-#' # `reco` is the result of a reconciliation call:
+#'
+#' # reco: reconciled forecasts matrix
 #' reco <- csrml(base = base, hat = hat, obs = obs, agg_mat = agg_mat)
 #'
 #' mdl <- extract_reconciled_ml(reco)
@@ -62,8 +63,17 @@ extract_reconciled_ml <- function(reco) {
     return(reco)
   }
 
+  if (!inherits(reco, "foreco")) {
+    cli_abort(
+      c(
+        "Failed to retrieve reconciliation info.",
+        "i" = "{.arg reco} is not a {.emph foreco} object"
+      )
+    )
+  }
+
   info <- tryCatch(
-    suppressWarnings(recoinfo(reco, verbose = FALSE)),
+    suppressWarnings(summary(reco)),
     error = function(e) {
       cli_warn(
         "Failed to retrieve reconciliation info: {conditionMessage(e)}",
@@ -74,7 +84,7 @@ extract_reconciled_ml <- function(reco) {
   )
 
   if (is.null(info) || is.null(info$fit)) {
-    cli::cli_warn("No reconciled model information available.", call = NULL)
+    cli_warn("No reconciled model information available.", call = NULL)
     return(invisible(NULL))
   }
 
@@ -84,16 +94,18 @@ extract_reconciled_ml <- function(reco) {
 #' @export
 #' @method print rml_fit
 print.rml_fit <- function(x, ...) {
-  cat("----- Reconciled models -----\n")
-  cat("Framework:", x$framework, "\n")
-  cat("Features:", x$features, "\n")
-  cat("Approach:", x$approach, "\n")
-  cat("  Models:", length(x$fit), "\n")
+  n <- length(x$fit)
+
+  cli::cli_text(
+    "<{.strong rml_fit}: {.val {n}} model{?s}, {.emph {x$framework}}>"
+  )
+
+  invisible(x)
 }
 
 # Rombouts et al. (2025) matrix-form
 input2rtw <- function(x, kset) {
-  x <- FoReco::FoReco2matrix(x, kset)
+  x <- FoReco2matrix(x, kset)
   x <- lapply(1:length(kset), function(i) {
     if (NCOL(x[[i]]) > 1) {
       tmp <- apply(x[[i]], 2, rep, each = kset[i])
@@ -106,7 +118,7 @@ input2rtw <- function(x, kset) {
   do.call(cbind, rev(x))
 }
 
-# Reconcile using machine learning models class
+# Reconcile Using Machine Learning Models Class
 #
 # This function creates an object of class \code{reconcile_ml} that contains the
 # necessary components to perform forecast reconciliation using machine learning
@@ -155,4 +167,65 @@ new_rml_fit <- function(
     ),
     class = "rml_fit"
   )
+}
+
+
+#' @export
+#' @method print summary.rml_fit
+print.summary.rml_fit <- function(x, ...) {
+  cat("----- Reconciled models -----\n")
+  cat("Framework:", x$framework, "\n")
+  cat("Features:", x$features, "\n")
+  cat("Approach:", x$approach, "\n")
+  cat("  Models:", x$n_model, "\n")
+}
+
+#' @export
+#' @method summary rml_fit
+summary.rml_fit <- function(object, ...) {
+  out <- list(
+    framework = object$framework,
+    features = object$features,
+    approach = object$approach,
+    n_model = length(x$fit)
+  )
+  class(out) <- "summary.rml_fit"
+  return(out)
+}
+
+#' @export
+#' @method plot rml_fit
+plot.rml_fit <- function(x, which = NULL, ...) {
+  fits <- x$fit
+  if (is.null(which)) {
+    which <- seq_along(fits)
+  }
+  approach <- x$approach
+
+  for (i in which) {
+    m <- fits[[i]]
+    if (approach == "xgboost") {
+      imp <- xgboost::xgb.importance(model = m)
+      xgboost::xgb.plot.importance(imp, ...)
+    } else if (approach == "lightgbm") {
+      imp <- lightgbm::lgb.importance(m)
+      lightgbm::lgb.plot.importance(imp, ...)
+    } else if (approach == "randomForest") {
+      randomForest::varImpPlot(m, ...)
+    } else if (approach == "mlr3") {
+      lrn <- if (inherits(m, "AutoTuner")) m$learner else m
+      if ("importance" %in% lrn$properties) {
+        imp <- sort(lrn$importance(), decreasing = TRUE)
+        imp <- head(imp)
+        barplot(rev(imp), horiz = TRUE, las = 1, xlab = "Importance", ...)
+      } else {
+        cli::cli_warn(
+          "Variable importance is not available for the mlr3 learner
+           {.val {lrn$id}}."
+        )
+      }
+    }
+    title(main = paste("Model", i))
+  }
+  invisible(x)
 }

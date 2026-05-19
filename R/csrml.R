@@ -36,7 +36,7 @@
 #' @returns
 #'   - [csrml] returns a cross-sectional reconciled forecast matrix with the same
 #'   dimensions, along with attributes containing the fitted model and
-#'   reconciliation settings (see, [FoReco::recoinfo] and
+#'   reconciliation settings (see, [FoReco::new_foreco_class] and
 #'   [extract_reconciled_ml]).
 #'
 #' @references
@@ -281,15 +281,30 @@ csrml <- function(
   attr(reco_mat, "fit") <- NULL
   reco_mat <- csbu(reco_mat, agg_mat = agg_mat, round = round, sntz = sntz)
 
-  attr(reco_mat, "FoReco") <- new_foreco_info(list(
-    fit = obj,
-    framework = "Cross-sectional",
-    forecast_horizon = NROW(reco_mat),
-    cs_n = n,
+  # attr(reco_mat, "FoReco") <- new_foreco_info(list(
+  #   fit = obj,
+  #   framework = "Cross-sectional",
+  #   forecast_horizon = NROW(reco_mat),
+  #   cs_n = n,
+  #   rfun = "csrml",
+  #   ml = approach
+  # ))
+  # return(reco_mat)
+
+  reco_mat <- .drop_foreco(reco_mat)
+  return(new_foreco_class(
+    reco_mat,
+    framework = "cross-sectional",
     rfun = "csrml",
-    ml = approach
+    rtype = "point",
+    rinfo = list(
+      ml = approach,
+      forecast_horizon = NROW(reco_mat),
+      cs_n = n,
+      fit = obj,
+      nn = all(!(reco_mat < 0))
+    )
   ))
-  return(reco_mat)
 }
 
 

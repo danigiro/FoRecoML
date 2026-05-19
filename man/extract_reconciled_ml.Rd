@@ -2,7 +2,7 @@
 % Please edit documentation in R/utils.R
 \name{extract_reconciled_ml}
 \alias{extract_reconciled_ml}
-\title{Extract the reconciled model from a reconciliation result}
+\title{Extract the Reconciled Model from a Reconciliation Results}
 \usage{
 extract_reconciled_ml(reco)
 }
@@ -55,7 +55,8 @@ base <- matrix(
   rnorm(length(ts_mean)*h, mean = ts_mean),
   h, byrow = TRUE)
 colnames(base) <- unlist(dimnames(agg_mat))
-# `reco` is the result of a reconciliation call:
+
+# reco: reconciled forecasts matrix
 reco <- csrml(base = base, hat = hat, obs = obs, agg_mat = agg_mat)
 
 mdl <- extract_reconciled_ml(reco)
