@@ -44,6 +44,10 @@
 #' solar forecasts, \emph{Solar Energy}, 251, 13–29.
 #' \doi{10.1016/j.solener.2023.01.003}
 #'
+#' Girolimetto, D. (2025), Non-negative forecast reconciliation: Optimal
+#' methods and operational solutions. \emph{Forecasting}, 7(4), 64;
+#' \doi{10.3390/forecast7040064}
+#'
 #' Girolimetto, D. and Di Fonzo, T. (2023), Point and probabilistic forecast
 #' reconciliation for general linearly constrained multiple time series,
 #' \emph{Statistical Methods & Applications}, 33, 581-607.

@@ -62,9 +62,9 @@ ML approach These may include algorithm-specific hyperparameters for
 format follows \link[mlr3tuning:auto_tuner]{mlr3tuning::auto_tuner}, except that the learner is set
 through \code{params}.}
 
-\item{sntz}{Logical. If \code{TRUE}, enforces non-negativity on reconciled
-forecasts using the heuristic "set-negative-to-zero" (Di Fonzo and
-Girolimetto, 2023). \emph{Default} is \code{FALSE}.}
+\item{sntz}{Logical. If \code{TRUE}, the negative base forecasts are set to
+zero (Di Fonzo and Girolimetto, 2023; Girolimetto 2025) before applying
+bottom-up. \emph{Default} is \code{FALSE}.}
 
 \item{round}{Logical. If \code{TRUE}, reconciled forecasts are rounded to
 integer values and coherence is ensured via a bottom-up adjustment.
@@ -203,6 +203,10 @@ reco_new <- csrml(base = base_new, fit = mdl, agg_mat = agg_mat)
 Di Fonzo, T. and Girolimetto, D. (2023), Spatio-temporal reconciliation of
 solar forecasts, \emph{Solar Energy}, 251, 13–29.
 \doi{10.1016/j.solener.2023.01.003}
+
+Girolimetto, D. (2025), Non-negative forecast reconciliation: Optimal
+methods and operational solutions. \emph{Forecasting}, 7(4), 64;
+\doi{10.3390/forecast7040064}
 
 Girolimetto, D. and Di Fonzo, T. (2023), Point and probabilistic forecast
 reconciliation for general linearly constrained multiple time series,
