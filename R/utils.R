@@ -171,8 +171,8 @@ new_rml_fit <- function(
 
 
 #' @export
-#' @method print summary.rml_fit
-print.summary.rml_fit <- function(x, ...) {
+#' @method print summary_rml_fit
+print.summary_rml_fit <- function(x, ...) {
   cat("----- Reconciled models -----\n")
   cat("Framework:", x$framework, "\n")
   cat("Features:", x$features, "\n")
@@ -189,7 +189,7 @@ summary.rml_fit <- function(object, ...) {
     approach = object$approach,
     n_model = length(object$fit)
   )
-  class(out) <- "summary.rml_fit"
+  class(out) <- "summary_rml_fit"
   return(out)
 }
 
