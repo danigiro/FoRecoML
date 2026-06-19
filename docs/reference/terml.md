@@ -99,9 +99,9 @@ terml_fit(hat, obs, agg_order, tew = "sum", features = "all",
 
 - sntz:
 
-  Logical. If `TRUE`, enforces non-negativity on reconciled forecasts
-  using the heuristic "set-negative-to-zero" (Di Fonzo and Girolimetto,
-  2023). *Default* is `FALSE`.
+  Logical. If `TRUE`, the negative base forecasts are set to zero (Di
+  Fonzo and Girolimetto, 2023; Girolimetto 2025) before applying
+  bottom-up. *Default* is `FALSE`.
 
 - round:
 
@@ -120,7 +120,7 @@ terml_fit(hat, obs, agg_order, tew = "sum", features = "all",
 - terml returns a temporal reconciled forecast vector with the same
   dimensions, along with attributes containing the fitted model and
   reconciliation settings (see,
-  [FoReco::recoinfo](https://danigiro.github.io/FoReco/reference/recoinfo.html)
+  [FoReco::new_foreco_class](https://danigiro.github.io/FoReco/reference/foreco-class.html)
   and
   [extract_reconciled_ml](https://danigiro.github.io/FoRecoML/reference/extract_reconciled_ml.md)).
 
@@ -134,6 +134,10 @@ terml_fit(hat, obs, agg_order, tew = "sum", features = "all",
 Di Fonzo, T. and Girolimetto, D. (2023), Spatio-temporal reconciliation
 of solar forecasts, *Solar Energy*, 251, 13–29.
 [doi:10.1016/j.solener.2023.01.003](https://doi.org/10.1016/j.solener.2023.01.003)
+
+Girolimetto, D. (2025), Non-negative forecast reconciliation: Optimal
+methods and operational solutions. *Forecasting*, 7(4), 64;
+[doi:10.3390/forecast7040064](https://doi.org/10.3390/forecast7040064)
 
 Girolimetto, D. and Di Fonzo, T. (2023), Point and probabilistic
 forecast reconciliation for general linearly constrained multiple time

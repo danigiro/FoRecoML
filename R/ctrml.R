@@ -456,17 +456,6 @@ ctrml <- function(
     tew = tew
   )
 
-  # attr(reco_mat, "FoReco") <- new_foreco_info(list(
-  #   fit = obj,
-  #   framework = "Cross-temporal",
-  #   forecast_horizon = h,
-  #   te_set = tmp$set,
-  #   cs_n = tmp$dim[["n"]],
-  #   rfun = "ctrml",
-  #   ml = approach
-  # ))
-  # return(reco_mat)
-
   reco_mat <- .drop_foreco(reco_mat)
   return(new_foreco_class(
     reco_mat,

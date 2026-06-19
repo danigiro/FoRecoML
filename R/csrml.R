@@ -285,16 +285,6 @@ csrml <- function(
   attr(reco_mat, "fit") <- NULL
   reco_mat <- csbu(reco_mat, agg_mat = agg_mat, round = round, sntz = sntz)
 
-  # attr(reco_mat, "FoReco") <- new_foreco_info(list(
-  #   fit = obj,
-  #   framework = "Cross-sectional",
-  #   forecast_horizon = NROW(reco_mat),
-  #   cs_n = n,
-  #   rfun = "csrml",
-  #   ml = approach
-  # ))
-  # return(reco_mat)
-
   reco_mat <- .drop_foreco(reco_mat)
   return(new_foreco_class(
     reco_mat,

@@ -12,5 +12,6 @@
 #' @importFrom methods as is
 #' @importFrom cli cli_abort cli_inform cli_warn
 #' @importFrom paradox to_tune
+#' @importFrom graphics barplot title
 #' @import mlr3learners
 NULL

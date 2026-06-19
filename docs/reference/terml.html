@@ -23,7 +23,7 @@ forecasts are then derived by temporal bottom-up."><meta property="og:image" con
 
     <a class="navbar-brand me-2" href="../index.html">FoRecoML</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">1.0.0.9000</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">1.1.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -146,9 +146,9 @@ through <code>params</code>.</p></dd>
 
 
 <dt id="arg-sntz">sntz<a class="anchor" aria-label="anchor" href="#arg-sntz"></a></dt>
-<dd><p>Logical. If <code>TRUE</code>, enforces non-negativity on reconciled
-forecasts using the heuristic "set-negative-to-zero" (Di Fonzo and
-Girolimetto, 2023). <em>Default</em> is <code>FALSE</code>.</p></dd>
+<dd><p>Logical. If <code>TRUE</code>, the negative base forecasts are set to
+zero (Di Fonzo and Girolimetto, 2023; Girolimetto 2025) before applying
+bottom-up. <em>Default</em> is <code>FALSE</code>.</p></dd>
 
 
 <dt id="arg-round">round<a class="anchor" aria-label="anchor" href="#arg-round"></a></dt>
@@ -168,7 +168,7 @@ integer values and coherence is ensured via a bottom-up adjustment.
 
 <ul><li><p>terml returns a temporal reconciled forecast vector with the same
 dimensions, along with attributes containing the fitted model and
-reconciliation settings (see, <a href="https://danigiro.github.io/FoReco/reference/recoinfo.html" class="external-link">FoReco::recoinfo</a> and
+reconciliation settings (see, <a href="https://danigiro.github.io/FoReco/reference/foreco-class.html" class="external-link">FoReco::new_foreco_class</a> and
 <a href="extract_reconciled_ml.html">extract_reconciled_ml</a>).</p></li>
 </ul><ul><li><p>terml_fit returns a fitted object that can be reused for
 reconciliation on new base forecasts.</p></li>
@@ -178,6 +178,9 @@ reconciliation on new base forecasts.</p></li>
     <p>Di Fonzo, T. and Girolimetto, D. (2023), Spatio-temporal reconciliation of
 solar forecasts, <em>Solar Energy</em>, 251, 13–29.
 <a href="https://doi.org/10.1016/j.solener.2023.01.003" class="external-link">doi:10.1016/j.solener.2023.01.003</a></p>
+<p>Girolimetto, D. (2025), Non-negative forecast reconciliation: Optimal
+methods and operational solutions. <em>Forecasting</em>, 7(4), 64;
+<a href="https://doi.org/10.3390/forecast7040064" class="external-link">doi:10.3390/forecast7040064</a></p>
 <p>Girolimetto, D. and Di Fonzo, T. (2023), Point and probabilistic forecast
 reconciliation for general linearly constrained multiple time series,
 <em>Statistical Methods &amp; Applications</em>, 33, 581-607.

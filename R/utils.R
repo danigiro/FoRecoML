@@ -187,7 +187,7 @@ summary.rml_fit <- function(object, ...) {
     framework = object$framework,
     features = object$features,
     approach = object$approach,
-    n_model = length(x$fit)
+    n_model = length(object$fit)
   )
   class(out) <- "summary.rml_fit"
   return(out)

@@ -350,16 +350,6 @@ terml <- function(
     tew = tew
   )
 
-  # attr(reco_mat, "FoReco") <- new_foreco_info(list(
-  #   fit = obj,
-  #   framework = "Temporal",
-  #   forecast_horizon = h,
-  #   te_set = tmp$set,
-  #   rfun = "terml",
-  #   ml = approach
-  # ))
-  # return(reco_mat)
-
   reco_mat <- .drop_foreco(reco_mat)
   return(new_foreco_class(
     reco_mat,

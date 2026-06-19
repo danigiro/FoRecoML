@@ -22,7 +22,6 @@ knitr::opts_chunk$set(
 
 **Fo**recast **Reco**nciliation is a post-forecasting process designed to improve accuracy and align forecasts within systems of linearly constrained time series (e.g. hierarchical or grouped). The **FoRecoML** package provides nonlinear forecast reconciliation procedures using **M**achine **L**earning in cross-sectional, temporal, and cross-temporal settings. `FoRecoML` inherits time series processing functionalities from [`FoReco`](https://danigiro.github.io/FoReco/).
 
-
 The core functions for reconciliation are:
 
 - `csrml()`

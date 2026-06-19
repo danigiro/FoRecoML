@@ -18,4 +18,4 @@
   [`FoRecoML-package`](https://danigiro.github.io/FoRecoML/reference/FoRecoML-package.md)
   : FoRecoML: Forecast Reconciliation with Machine Learning
 - [`extract_reconciled_ml()`](https://danigiro.github.io/FoRecoML/reference/extract_reconciled_ml.md)
-  : Extract the reconciled model from a reconciliation result
+  : Extract the Reconciled Model from a Reconciliation Results
