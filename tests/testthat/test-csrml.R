@@ -39,6 +39,7 @@ if (require(testthat)) {
   colnames(base) <- unlist(dimnames(agg_mat))
 
   test_that("Approach and features", {
+    skip_on_cran()
     for (i in c("xgboost", "mlr3", "lightgbm", "randomForest")) {
       for (j in c("all", "bts", "str", "str-bts")) {
         expect_no_error(csrml(
@@ -54,6 +55,7 @@ if (require(testthat)) {
   })
 
   test_that("Two step", {
+    skip_on_cran()
     mdl <- csrml_fit(
       hat = hat,
       obs = obs,
@@ -80,6 +82,7 @@ if (require(testthat)) {
   })
 
   test_that("Errors", {
+    skip_on_cran()
     expect_error(csrml_fit(hat = hat, obs = obs))
     expect_error(csrml_fit(hat = hat, agg_mat = agg_mat))
     expect_error(csrml_fit(obs = obs, agg_mat = agg_mat))

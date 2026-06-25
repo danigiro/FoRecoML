@@ -98,6 +98,7 @@
 #' \doi{10.1016/j.ijforecast.2024.05.008}
 #'
 #' @examples
+#' \donttest{
 #' # m: quarterly temporal aggregation order
 #' m <- 4
 #' te_set <- tetools(m)$set
@@ -176,7 +177,7 @@
 #'               agg_mat = agg_mat, approach = "mlr3",
 #'               # choose mlr3 learner (here Random Forest via ranger)
 #'               params = list(.key = "regr.ranger"))
-#' \donttest{
+#'
 #' # With mlr3 we can also tune our parameters: e.g. explore mtry in [1,4].
 #' # We can reduce excessive logging by calling:
 #' # if(requireNamespace("lgr", quietly = TRUE)){
@@ -194,7 +195,7 @@
 #'                 # stop after 10 evaluations
 #'                 terminator = mlr3tuning::trm("evals", n_evals = 10)
 #'               ))
-#' }
+#'
 #' ##########################################################################
 #' # Usage with pre-trained models
 #' ##########################################################################
@@ -215,6 +216,7 @@
 #' )
 #' reco_new <- ctrml(base = base_new, fit = mdl, agg_order = m,
 #'                   agg_mat = agg_mat)
+#' }
 #'
 #' @export
 ctrml <- function(

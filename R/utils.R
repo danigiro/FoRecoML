@@ -17,6 +17,7 @@
 #'   \code{"lightgbm"}, \code{"randomForest"}, \code{"mlr3"}).}
 #'
 #' @examples
+#' \donttest{
 #' # agg_mat: simple aggregation matrix, A = B + C
 #' agg_mat <- t(c(1,1))
 #' dimnames(agg_mat) <- list("A", c("B", "C"))
@@ -53,6 +54,7 @@
 #'
 #' mdl <- extract_reconciled_ml(reco)
 #' mdl
+#' }
 #'
 #' @export
 extract_reconciled_ml <- function(reco) {

@@ -44,6 +44,7 @@ if (require(testthat)) {
   )
 
   test_that("Approach and features", {
+    skip_on_cran()
     for (i in c("xgboost", "mlr3", "lightgbm", "randomForest")) {
       for (j in c(
         "all",
@@ -63,6 +64,7 @@ if (require(testthat)) {
   })
 
   test_that("Two step", {
+    skip_on_cran()
     mdl <- ctrml_fit(
       hat = hat,
       obs = obs,
@@ -91,6 +93,7 @@ if (require(testthat)) {
   })
 
   test_that("Errors", {
+    skip_on_cran()
     expect_error(ctrml_fit(hat = hat, obs = obs, agg_order = m))
     expect_error(ctrml_fit(hat = hat, obs = obs, agg_mat = agg_mat))
     expect_error(ctrml_fit(hat = hat, agg_order = m, agg_mat = agg_mat))

@@ -59,6 +59,7 @@
 #' \doi{10.1016/j.asoc.2021.107756}
 #'
 #' @examples
+#' \donttest{
 #' # agg_mat: simple aggregation matrix, A = B + C
 #' agg_mat <- t(c(1,1))
 #' dimnames(agg_mat) <- list("A", c("B", "C"))
@@ -121,7 +122,6 @@
 #'               # choose mlr3 learner (here Random Forest via ranger)
 #'               params = list(.key = "regr.ranger"))
 #'
-#' \donttest{
 #' # With mlr3 we can also tune our parameters: e.g. explore mtry in [1,2].
 #' # We can reduce excessive logging by calling:
 #' # if(requireNamespace("lgr", quietly = TRUE)){
@@ -139,7 +139,6 @@
 #'                 # stop after 10 evaluations
 #'                 terminator = mlr3tuning::trm("evals", n_evals = 20)
 #'               ))
-#' }
 #' ##########################################################################
 #' # Usage with pre-trained models
 #' ##########################################################################
@@ -155,6 +154,7 @@
 #' # New base forecasts matrix
 #' base_new <- matrix(rnorm(length(ts_mean)*h, mean = ts_mean), h, byrow = TRUE)
 #' reco_new <- csrml(base = base_new, fit = mdl, agg_mat = agg_mat)
+#' }
 #'
 #' @export
 csrml <- function(

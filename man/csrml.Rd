@@ -101,6 +101,7 @@ constrained time series it can be applied within the broader reconciliation
 framework described by Girolimetto and Di Fonzo (2024).
 }
 \examples{
+\donttest{
 # agg_mat: simple aggregation matrix, A = B + C
 agg_mat <- t(c(1,1))
 dimnames(agg_mat) <- list("A", c("B", "C"))
@@ -163,7 +164,6 @@ reco <- csrml(base = base, hat = hat, obs = obs, agg_mat = agg_mat,
               # choose mlr3 learner (here Random Forest via ranger)
               params = list(.key = "regr.ranger"))
 
-\donttest{
 # With mlr3 we can also tune our parameters: e.g. explore mtry in [1,2].
 # We can reduce excessive logging by calling:
 # if(requireNamespace("lgr", quietly = TRUE)){
@@ -181,7 +181,6 @@ reco <- csrml(base = base, hat = hat, obs = obs, agg_mat = agg_mat,
                 # stop after 10 evaluations
                 terminator = mlr3tuning::trm("evals", n_evals = 20)
               ))
-}
 ##########################################################################
 # Usage with pre-trained models
 ##########################################################################
@@ -197,6 +196,7 @@ mdl2 <- extract_reconciled_ml(reco)
 # New base forecasts matrix
 base_new <- matrix(rnorm(length(ts_mean)*h, mean = ts_mean), h, byrow = TRUE)
 reco_new <- csrml(base = base_new, fit = mdl, agg_mat = agg_mat)
+}
 
 }
 \references{

@@ -26,6 +26,7 @@ if (require(testthat)) {
   base <- rnorm(sum(te_fh) * h, rep(te_set * bts_mean, h * te_fh))
 
   test_that("Approach and features", {
+    skip_on_cran()
     for (i in c("xgboost", "mlr3", "lightgbm", "randomForest")) {
       for (j in c("all", "low-high")) {
         expect_no_error(terml(
@@ -41,6 +42,7 @@ if (require(testthat)) {
   })
 
   test_that("Two step", {
+    skip_on_cran()
     mdl <- terml_fit(
       hat = hat,
       obs = obs,
@@ -65,6 +67,7 @@ if (require(testthat)) {
   })
 
   test_that("Errors", {
+    skip_on_cran()
     expect_error(terml_fit(hat = hat, obs = obs))
     expect_error(terml_fit(hat = hat, agg_order = m))
     expect_error(terml_fit(obs = obs, agg_order = m))
