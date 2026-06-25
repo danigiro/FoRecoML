@@ -43,6 +43,7 @@ A named list with reconciliation information:
 ## Examples
 
 ``` r
+# \donttest{
 # agg_mat: simple aggregation matrix, A = B + C
 agg_mat <- t(c(1,1))
 dimnames(agg_mat) <- list("A", c("B", "C"))
@@ -80,4 +81,5 @@ reco <- csrml(base = base, hat = hat, obs = obs, agg_mat = agg_mat)
 mdl <- extract_reconciled_ml(reco)
 mdl
 #> <rml_fit: 2 models, cs>
+# }
 ```

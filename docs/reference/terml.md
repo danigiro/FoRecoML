@@ -153,6 +153,7 @@ reconciliation at digital platforms with machine learning.
 ## Examples
 
 ``` r
+# \donttest{
 # m: quarterly temporal aggregation order
 m <- 4
 te_set <- tetools(m)$set
@@ -212,7 +213,6 @@ reco <- terml(base = base, hat = hat, obs = obs, agg_order = m,
               # choose mlr3 learner (here Random Forest via ranger)
               params = list(.key = "regr.ranger"))
 
-# \donttest{
 # With mlr3 we can also tune our parameters: e.g. explore mtry in [1,4].
 # We can reduce excessive logging by calling:
 # if(requireNamespace("lgr", quietly = TRUE)){
@@ -230,7 +230,7 @@ reco <- terml(base = base, hat = hat, obs = obs, agg_order = m,
                 # stop after 10 evaluations
                 terminator = mlr3tuning::trm("evals", n_evals = 10)
               ))
-# }
+
 ##########################################################################
 # Usage with pre-trained models
 ##########################################################################
@@ -246,4 +246,5 @@ mdl2 <- extract_reconciled_ml(reco)
 # New base forecasts matrix
 base_new <- rnorm(sum(te_fh)*h, rep(te_set*bts_mean,  h*te_fh))
 reco_new <- terml(base = base_new, fit = mdl2, agg_order = m)
+# }
 ```

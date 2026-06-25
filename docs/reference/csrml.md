@@ -148,6 +148,7 @@ machine learning. *Applied Soft Computing*, 112, 107756.
 ## Examples
 
 ``` r
+# \donttest{
 # agg_mat: simple aggregation matrix, A = B + C
 agg_mat <- t(c(1,1))
 dimnames(agg_mat) <- list("A", c("B", "C"))
@@ -210,7 +211,6 @@ reco <- csrml(base = base, hat = hat, obs = obs, agg_mat = agg_mat,
               # choose mlr3 learner (here Random Forest via ranger)
               params = list(.key = "regr.ranger"))
 
-# \donttest{
 # With mlr3 we can also tune our parameters: e.g. explore mtry in [1,2].
 # We can reduce excessive logging by calling:
 # if(requireNamespace("lgr", quietly = TRUE)){
@@ -230,7 +230,6 @@ reco <- csrml(base = base, hat = hat, obs = obs, agg_mat = agg_mat,
               ))
 #> Warning: package ‘future’ was built under R version 4.5.2
 #> Warning: package ‘mlr3’ was built under R version 4.5.2
-# }
 ##########################################################################
 # Usage with pre-trained models
 ##########################################################################
@@ -246,4 +245,5 @@ mdl2 <- extract_reconciled_ml(reco)
 # New base forecasts matrix
 base_new <- matrix(rnorm(length(ts_mean)*h, mean = ts_mean), h, byrow = TRUE)
 reco_new <- csrml(base = base_new, fit = mdl, agg_mat = agg_mat)
+# }
 ```

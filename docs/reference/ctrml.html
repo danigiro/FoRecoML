@@ -216,7 +216,8 @@ reconciliation at digital platforms with machine learning.
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># m: quarterly temporal aggregation order</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># \donttest{</span></span></span>
+<span class="r-in"><span><span class="co"># m: quarterly temporal aggregation order</span></span></span>
 <span class="r-in"><span><span class="va">m</span> <span class="op">&lt;-</span> <span class="fl">4</span></span></span>
 <span class="r-in"><span><span class="va">te_set</span> <span class="op">&lt;-</span> <span class="fu">tetools</span><span class="op">(</span><span class="va">m</span><span class="op">)</span><span class="op">$</span><span class="va">set</span></span></span>
 <span class="r-in"><span></span></span>
@@ -294,7 +295,7 @@ reconciliation at digital platforms with machine learning.
 <span class="r-in"><span>              agg_mat <span class="op">=</span> <span class="va">agg_mat</span>, approach <span class="op">=</span> <span class="st">"mlr3"</span>,</span></span>
 <span class="r-in"><span>              <span class="co"># choose mlr3 learner (here Random Forest via ranger)</span></span></span>
 <span class="r-in"><span>              params <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>.key <span class="op">=</span> <span class="st">"regr.ranger"</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="co"># \donttest{</span></span></span>
+<span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># With mlr3 we can also tune our parameters: e.g. explore mtry in [1,4].</span></span></span>
 <span class="r-in"><span><span class="co"># We can reduce excessive logging by calling:</span></span></span>
 <span class="r-in"><span><span class="co"># if(requireNamespace("lgr", quietly = TRUE)){</span></span></span>
@@ -312,7 +313,7 @@ reconciliation at digital platforms with machine learning.
 <span class="r-in"><span>                <span class="co"># stop after 10 evaluations</span></span></span>
 <span class="r-in"><span>                terminator <span class="op">=</span> <span class="fu">mlr3tuning</span><span class="fu">::</span><span class="fu"><a href="https://bbotk.mlr-org.com/reference/trm.html" class="external-link">trm</a></span><span class="op">(</span><span class="st">"evals"</span>, n_evals <span class="op">=</span> <span class="fl">10</span><span class="op">)</span></span></span>
 <span class="r-in"><span>              <span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="co"># }</span></span></span>
+<span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">##########################################################################</span></span></span>
 <span class="r-in"><span><span class="co"># Usage with pre-trained models</span></span></span>
 <span class="r-in"><span><span class="co">##########################################################################</span></span></span>
@@ -333,6 +334,7 @@ reconciliation at digital platforms with machine learning.
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">reco_new</span> <span class="op">&lt;-</span> <span class="fu">ctrml</span><span class="op">(</span>base <span class="op">=</span> <span class="va">base_new</span>, fit <span class="op">=</span> <span class="va">mdl</span>, agg_order <span class="op">=</span> <span class="va">m</span>,</span></span>
 <span class="r-in"><span>                  agg_mat <span class="op">=</span> <span class="va">agg_mat</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># }</span></span></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
