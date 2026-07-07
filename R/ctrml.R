@@ -256,9 +256,15 @@ ctrml <- function(
     if (missing(obs)) {
       cli_abort("Argument {.arg obs} is missing, with no default.", call = NULL)
     } else if (NCOL(obs) %% tmp$dim[["m"]] != 0) {
-      cli_abort("Incorrect {.arg obs} columns dimension.", call = NULL)
+      cli_abort(
+        'The number of columns of {.arg obs} must be a multiple of {tmp$dim[["m"]]}, but it is {NCOL(obs)}.',
+        call = NULL
+      )
     } else if (NROW(obs) != tmp$dim[["nb"]]) {
-      cli_abort("Incorrect {.arg obs} rows dimension.", call = NULL)
+      cli_abort(
+        '{.arg obs} must have {tmp$dim[["nb"]]} rows, but it has {NROW(obs)}',
+        call = NULL
+      )
     } else {
       if (!grepl("mfh", features)) {
         obs <- t(obs)
@@ -273,9 +279,15 @@ ctrml <- function(
     if (missing(hat)) {
       cli_abort("Argument {.arg hat} is missing, with no default.", call = NULL)
     } else if (NCOL(hat) %% tmp$dim[["kt"]] != 0) {
-      cli_abort("Incorrect {.arg hat} columns dimension.", call = NULL)
+      cli_abort(
+        'The number of columns of {.arg hat} must be a multiple of {tmp$dim[["kt"]]}, but it is {NCOL(hat)}.',
+        call = NULL
+      )
     } else if (NROW(hat) != tmp$dim[["n"]]) {
-      cli_abort("Incorrect {.arg hat} rows dimension.", call = NULL)
+      cli_abort(
+        '{.arg hat} must have {tmp$dim[["n"]]} rows, but it has {NROW(hat)}.',
+        call = NULL
+      )
     } else {
       if (!grepl("mfh", features)) {
         hat <- input2rtw(hat, tmp$set)
@@ -346,7 +358,10 @@ ctrml <- function(
         block_sampling <- tmp$dim[["m"]]
       },
       {
-        cli_abort("Unknown {.arg features} option.", call = NULL)
+        cli_abort(
+          '{.arg features} = {.val {features}} is not a valid option.',
+          call = NULL
+        )
       }
     )
     attr(sel_mat, "sel_method") <- features
@@ -366,11 +381,17 @@ ctrml <- function(
     }
   } else {
     if (!inherits(fit, "rml_fit")) {
-      cli_abort("Incorrect {.arg fit} object.", call = NULL)
+      cli_abort(
+        '{.arg fit} must be an {.cls rml_fit} object, not {.obj_type_friendly {fit}}.',
+        call = NULL
+      )
     }
 
-    if (fit$framework != "ct") {
-      cli_abort("Incompatible {.arg fit} framework.", call = NULL)
+    if (fit$framework != "cross-temporal") {
+      cli_abort(
+        "{.arg fit} was trained for the {.val {fit$framework}} framework, but a {.val cross-temporal} one is required.",
+        call = NULL
+      )
     }
 
     agg_order <- fit$agg_order
@@ -395,9 +416,15 @@ ctrml <- function(
       call = NULL
     )
   } else if (NCOL(base) %% tmp$dim[["kt"]] != 0) {
-    cli_abort("Incorrect {.arg base} columns dimension.", call = NULL)
+    cli_abort(
+      'The number of columns of {.arg base} must be a multiple of {tmp$dim[["kt"]]}, but it is {NCOL(base)}.',
+      call = NULL
+    )
   } else if (NROW(base) != tmp$dim[["n"]]) {
-    cli_abort("Incorrect {.arg base} rows dimension.", call = NULL)
+    cli_abort(
+      '{.arg base} must have {tmp$dim[["n"]]} rows, but it has {NROW(base)}.',
+      call = NULL
+    )
   } else {
     h <- NCOL(base) / tmp$dim[["kt"]]
     if (!grepl("mfh", features)) {
@@ -439,9 +466,10 @@ ctrml <- function(
     tew = tew,
     sel_mat = obj$sel_mat,
     approach = approach,
-    framework = "ct",
+    framework = "cross-temporal",
     features = features,
     features_size = features_size,
+    sample_size = NROW(hat),
     block_sampling = block_sampling
   )
   attr(reco_mat, "fit") <- NULL
@@ -481,8 +509,9 @@ ctrml <- function(
 #'           approach = "randomForest", params = NULL, tuning = NULL)
 #'
 #' @return
-#'   - [ctrml_fit] returns a fitted object that can be reused for
-#'     reconciliation on new base forecasts.
+#'   - [ctrml_fit] returns a `rml_fit` object that can be reused for
+#'     reconciliation on new base forecasts
+#'     (see [extract_reconciled_ml] for more details).
 #'
 #' @rdname ctrml
 #'
@@ -519,9 +548,15 @@ ctrml_fit <- function(
   if (missing(obs)) {
     cli_abort("Argument {.arg obs} is missing, with no default.", call = NULL)
   } else if (NCOL(obs) %% tmp$dim[["m"]] != 0) {
-    cli_abort("Incorrect {.arg obs} columns dimension.", call = NULL)
+    cli_abort(
+      'The number of columns of {.arg obs} must be a multiple of {tmp$dim[["m"]]}, but it is {NCOL(obs)}.',
+      call = NULL
+    )
   } else if (NROW(obs) != tmp$dim[["nb"]]) {
-    cli_abort("Incorrect {.arg obs} rows dimension.", call = NULL)
+    cli_abort(
+      '{.arg obs} must have {tmp$dim[["nb"]]} rows, but it has {NROW(obs)}.',
+      call = NULL
+    )
   } else {
     if (!grepl("mfh", features)) {
       obs <- t(obs)
@@ -536,9 +571,15 @@ ctrml_fit <- function(
   if (missing(hat)) {
     cli_abort("Argument {.arg hat} is missing, with no default.", call = NULL)
   } else if (NCOL(hat) %% tmp$dim[["kt"]] != 0) {
-    cli_abort("Incorrect {.arg hat} columns dimension.", call = NULL)
+    cli_abort(
+      'The number of columns of {.arg hat} must be a multiple of {tmp$dim[["kt"]]}, but it is {NCOL(hat)}.',
+      call = NULL
+    )
   } else if (NROW(hat) != tmp$dim[["n"]]) {
-    cli_abort("Incorrect {.arg hat} rows dimension.", call = NULL)
+    cli_abort(
+      '{.arg hat} must have {tmp$dim[["n"]]} rows, but it has {NROW(hat)}.',
+      call = NULL
+    )
   } else {
     if (!grepl("mfh", features)) {
       hat <- input2rtw(hat, tmp$set)
@@ -608,7 +649,10 @@ ctrml_fit <- function(
       block_sampling <- tmp$dim[["m"]]
     },
     {
-      cli_abort("Unknown {.arg features} option.", call = NULL)
+      cli_abort(
+        '{.arg features} = {.val {features}} is not a valid option.',
+        call = NULL
+      )
     }
   )
   attr(sel_mat, "sel_method") <- features
@@ -646,9 +690,10 @@ ctrml_fit <- function(
     tew = tew,
     sel_mat = obj$sel_mat,
     approach = approach,
-    framework = "ct",
+    framework = "cross-temporal",
     features = features,
     features_size = NCOL(hat),
+    sample_size = NROW(hat),
     block_sampling = block_sampling
   )
   return(obj)

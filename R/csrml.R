@@ -188,7 +188,10 @@ csrml <- function(
     if (missing(obs)) {
       cli_abort("Argument {.arg obs} is missing, with no default.", call = NULL)
     } else if (NCOL(obs) != nb) {
-      cli_abort("Incorrect {.arg obs} columns dimension.", call = NULL)
+      cli_abort(
+        '{.arg obs} must have {nb} columns, but it has {NCOL(obs)}.',
+        call = NULL
+      )
     }
 
     if (missing(hat)) {
@@ -196,7 +199,10 @@ csrml <- function(
     }
 
     if (NCOL(hat) != n) {
-      cli_abort("Incorrect {.arg hat} columns dimension.", call = NULL)
+      cli_abort(
+        '{.arg hat} must have {n} columns, but it has {NCOL(hat)}.',
+        call = NULL
+      )
     }
 
     switch(
@@ -216,7 +222,10 @@ csrml <- function(
         sel_mat <- Matrix(1, nrow = n, ncol = nb, sparse = TRUE)
       },
       {
-        cli_abort("Unknown {.arg features} option.", call = NULL)
+        cli_abort(
+          '{.arg features} = {.val {features}} is not a valid option.',
+          call = NULL
+        )
       }
     )
     attr(sel_mat, "sel_method") <- features
@@ -236,11 +245,17 @@ csrml <- function(
     }
   } else {
     if (!inherits(fit, "rml_fit")) {
-      cli_abort("Incorrect {.arg fit} object.", call = NULL)
+      cli_abort(
+        "{.arg fit} must be an {.cls rml_fit} object, not {.obj_type_friendly {fit}}.",
+        call = NULL
+      )
     }
 
-    if (fit$framework != "cs") {
-      cli_abort("Incompatible {.arg fit} framework.", call = NULL)
+    if (fit$framework != "cross-sectional") {
+      cli_abort(
+        "{.arg fit} was trained for the {.val {fit$framework}} framework, but a {.val cross-sectional} one is required.",
+        call = NULL
+      )
     }
 
     hat <- NULL
@@ -258,7 +273,10 @@ csrml <- function(
       call = NULL
     )
   } else if (NCOL(base) != n) {
-    cli_abort("Incorrect {.arg base} columns dimension.", call = NULL)
+    cli_abort(
+      '{.arg base} must have {n} columns, but it has {NCOL(base)}.',
+      call = NULL
+    )
   }
 
   reco_mat <- rml(
@@ -278,9 +296,10 @@ csrml <- function(
     agg_mat = agg_mat,
     sel_mat = obj$sel_mat,
     approach = approach,
-    framework = "cs",
+    framework = "cross-sectional",
     features = features,
-    features_size = n
+    features_size = n,
+    sample_size = NROW(hat)
   )
   attr(reco_mat, "fit") <- NULL
   reco_mat <- csbu(reco_mat, agg_mat = agg_mat, round = round, sntz = sntz)
@@ -308,8 +327,9 @@ csrml <- function(
 #'           params = NULL, tuning = NULL)
 #'
 #' @return
-#'   - [csrml_fit] returns a fitted object that can be reused for
-#'     reconciliation on new base forecasts.
+#'   - [csrml_fit] returns a `rml_fit` object that can be reused for
+#'     reconciliation on new base forecasts
+#'     (see [extract_reconciled_ml] for more details).
 #'
 #' @rdname csrml
 #'
@@ -340,11 +360,19 @@ csrml_fit <- function(
   if (missing(obs)) {
     cli_abort("Argument {.arg obs} is missing, with no default.", call = NULL)
   } else if (NCOL(obs) != nb) {
-    cli_abort("Incorrect {.arg obs} columns dimension.", call = NULL)
+    cli_abort(
+      '{.arg obs} must have {nb} columns, but it has {NCOL(obs)}.',
+      call = NULL
+    )
   }
 
   if (missing(hat)) {
     cli_abort("Argument {.arg hat} is missing, with no default.", call = NULL)
+  } else if (NCOL(hat) != n) {
+    cli_abort(
+      '{.arg hat} must have {n} columns, but it has {NCOL(hat)}.',
+      call = NULL
+    )
   }
 
   switch(
@@ -364,7 +392,10 @@ csrml_fit <- function(
       sel_mat <- Matrix(1, nrow = n, ncol = nb, sparse = TRUE)
     },
     {
-      cli_abort("Unknown {.arg features} option.", call = NULL)
+      cli_abort(
+        '{.arg features} = {.val {features}} is not a valid option.',
+        call = NULL
+      )
     }
   )
   attr(sel_mat, "sel_method") <- features
@@ -398,9 +429,10 @@ csrml_fit <- function(
     agg_mat = agg_mat,
     sel_mat = obj$sel_mat,
     approach = approach,
-    framework = "cs",
+    framework = "cross-sectional",
     features = features,
-    features_size = ncol(hat)
+    features_size = n,
+    sample_size = NROW(hat)
   )
 
   return(obj)

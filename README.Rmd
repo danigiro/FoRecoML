@@ -33,11 +33,7 @@ Temporal Reconciliation with Machine Learning
 - `ctrml()`
 Cross-temporal Reconciliation with Machine Learning
 
-- `extract_reconciled_ml()`
-Extraction of the fitted machine learning model used for forecast reconciliation from the output of one of the reconciliation function. The fitted machine learning model can be reused for different sets of data with the same hierarchical structure.
-
 Machine learning models that can be used with `FoRecoML` include random forest (`randomForest`), extreme gradient boosting (`xgboost`), light gradient boosting machine (`lightgbm`), and models supported by the `mlr3` package.
-
 
 ## Installation
 

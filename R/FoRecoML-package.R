@@ -10,7 +10,7 @@
 #' @importFrom mlr3tuning tnr auto_tuner
 #' @importFrom stats na.omit setNames predict
 #' @importFrom methods as is
-#' @importFrom cli cli_abort cli_inform cli_warn
+#' @importFrom cli cli_abort cli_inform cli_warn cli_alert_info cli_h3 cli_ul
 #' @importFrom paradox to_tune
 #' @importFrom graphics barplot title
 #' @import mlr3learners

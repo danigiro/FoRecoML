@@ -19,7 +19,7 @@ reconciliation functions."><meta property="og:image" content="https://danigiro.g
 
     <a class="navbar-brand me-2" href="../index.html">FoRecoML</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">1.1.0</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">1.1.0.9000</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -67,19 +67,15 @@ reconciliation functions.</p>
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>A named list with reconciliation information:</p>
-<dl><dt><code>sel_mat</code></dt>
-<dd><p>Features used (e.g., the selected feature
-matrix or indices).</p></dd>
-
-<dt><code>fit</code></dt>
-<dd><p>List of reconciled models.</p></dd>
-
-<dt><code>approach</code></dt>
-<dd><p>The learning approach used (e.g., <code>"xgboost"</code>,
-<code>"lightgbm"</code>, <code>"randomForest"</code>, <code>"mlr3"</code>).</p></dd>
-
-</dl></div>
+    <p>An <code>rml_fit</code> object (S3 class) that extends the reconciled model(s)
+with reconciliation metadata. This object lets you pre-train the
+reconciliation approach before base forecasts are available: the
+fitted result can then be passed to the <code>fit</code> argument of <a href="csrml.html">csrml</a>,
+<a href="terml.html">terml</a> or <a href="ctrml.html">ctrml</a> to reconcile new forecasts without refitting.
+While the underlying list of models can be retrieved by extracting
+the <code>fit</code> element, the object is primarily intended to be used
+as-is.</p>
+    </div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
@@ -120,7 +116,25 @@ matrix or indices).</p></dd>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">mdl</span> <span class="op">&lt;-</span> <span class="fu">extract_reconciled_ml</span><span class="op">(</span><span class="va">reco</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">mdl</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> &lt;<span style="font-weight: bold;">rml_fit</span>: <span style="color: #0000BB;">2</span> models, <span style="font-style: italic;">cs</span>&gt;</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> &lt;<span style="font-weight: bold;">rml_fit</span>: <span style="color: #0000BB;">2</span> models, <span style="font-style: italic;">cross-sectional</span> framework&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  ├─ B: <span style="color: #626262;">&lt;randomForest&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  └─ C: <span style="color: #626262;">&lt;randomForest&gt;</span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">mdl</span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> <span style="font-weight: bold;">Cross-sectional</span> reconciliation using Machine Learning methods</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> • Machine Learning approach: <span style="font-weight: bold;">`randomForest`</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> • Number of cross-sectional series: 3</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> • Number of features: 3</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> • Training sample size: 100</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> ── Cross-sectional linear combination matrix </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 x 2 sparse Matrix of class "dgCMatrix"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   B C</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> A 1 1</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> ── Trained models </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> &lt;<span style="font-weight: bold;">rml_fit</span>: <span style="color: #0000BB;">2</span> models, <span style="font-style: italic;">cross-sectional</span> framework&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  ├─ B: <span style="color: #626262;">&lt;randomForest&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  └─ C: <span style="color: #626262;">&lt;randomForest&gt;</span></span>
 <span class="r-in"><span><span class="co"># }</span></span></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>

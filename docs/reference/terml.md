@@ -126,8 +126,10 @@ terml_fit(hat, obs, agg_order, tew = "sum", features = "all",
 
 &nbsp;
 
-- terml_fit returns a fitted object that can be reused for
-  reconciliation on new base forecasts.
+- terml_fit returns a `rml_fit` object that can be reused for
+  reconciliation on new base forecasts (see
+  [extract_reconciled_ml](https://danigiro.github.io/FoRecoML/reference/extract_reconciled_ml.md)
+  for more details).
 
 ## References
 

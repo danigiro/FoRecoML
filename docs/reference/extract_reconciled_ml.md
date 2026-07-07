@@ -25,20 +25,16 @@ extract_reconciled_ml(reco)
 
 ## Value
 
-A named list with reconciliation information:
-
-- `sel_mat`:
-
-  Features used (e.g., the selected feature matrix or indices).
-
-- `fit`:
-
-  List of reconciled models.
-
-- `approach`:
-
-  The learning approach used (e.g., `"xgboost"`, `"lightgbm"`,
-  `"randomForest"`, `"mlr3"`).
+An `rml_fit` object (S3 class) that extends the reconciled model(s) with
+reconciliation metadata. This object lets you pre-train the
+reconciliation approach before base forecasts are available: the fitted
+result can then be passed to the `fit` argument of
+[csrml](https://danigiro.github.io/FoRecoML/reference/csrml.md),
+[terml](https://danigiro.github.io/FoRecoML/reference/terml.md) or
+[ctrml](https://danigiro.github.io/FoRecoML/reference/ctrml.md) to
+reconcile new forecasts without refitting. While the underlying list of
+models can be retrieved by extracting the `fit` element, the object is
+primarily intended to be used as-is.
 
 ## Examples
 
@@ -80,6 +76,24 @@ reco <- csrml(base = base, hat = hat, obs = obs, agg_mat = agg_mat)
 
 mdl <- extract_reconciled_ml(reco)
 mdl
-#> <rml_fit: 2 models, cs>
+#> <rml_fit: 2 models, cross-sectional framework>
+#>  ├─ B: <randomForest>
+#>  └─ C: <randomForest>
+summary(mdl)
+#> ℹ Cross-sectional reconciliation using Machine Learning methods
+#> • Machine Learning approach: `randomForest`
+#> • Number of cross-sectional series: 3
+#> • Number of features: 3
+#> • Training sample size: 100
+#> 
+#> ── Cross-sectional linear combination matrix 
+#> 1 x 2 sparse Matrix of class "dgCMatrix"
+#>   B C
+#> A 1 1
+#> 
+#> ── Trained models 
+#> <rml_fit: 2 models, cross-sectional framework>
+#>  ├─ B: <randomForest>
+#>  └─ C: <randomForest>
 # }
 ```

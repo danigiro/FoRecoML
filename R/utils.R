@@ -9,12 +9,15 @@
 #' @param reco An object returned by a reconciliation function
 #' (e.g., the result of [csrml], [terml] and [ctrml]).
 #'
-#' @return A named list with reconciliation information:
-#'   \item{\code{sel_mat}}{Features used (e.g., the selected feature
-#'   matrix or indices).}
-#'   \item{\code{fit}}{List of reconciled models.}
-#'   \item{\code{approach}}{The learning approach used (e.g., \code{"xgboost"},
-#'   \code{"lightgbm"}, \code{"randomForest"}, \code{"mlr3"}).}
+#' @return
+#' An `rml_fit` object (S3 class) that extends the reconciled model(s)
+#' with reconciliation metadata. This object lets you pre-train the
+#' reconciliation approach before base forecasts are available: the
+#' fitted result can then be passed to the `fit` argument of [csrml],
+#' [terml] or [ctrml] to reconcile new forecasts without refitting.
+#' While the underlying list of models can be retrieved by extracting
+#' the `fit` element, the object is primarily intended to be used
+#' as-is.
 #'
 #' @examples
 #' \donttest{
@@ -54,6 +57,7 @@
 #'
 #' mdl <- extract_reconciled_ml(reco)
 #' mdl
+#' summary(mdl)
 #' }
 #'
 #' @export
@@ -97,11 +101,23 @@ extract_reconciled_ml <- function(reco) {
 #' @method print rml_fit
 print.rml_fit <- function(x, ...) {
   n <- length(x$fit)
+  te_label <- NULL
+  cs_label <- NULL
 
-  cli::cli_text(
-    "<{.strong rml_fit}: {.val {n}} model{?s}, {.emph {x$framework}}>"
+  if (!is.null(x$agg_mat)) {
+    if (!is.null(colnames(x$agg_mat))) {
+      cs_label <- colnames(x$agg_mat)
+    } else {
+      cs_label <- paste0("Bottom series ", 1:length(x))
+    }
+  }
+
+  print_tree_model(
+    x$fit,
+    framework = x$framework,
+    cs_label = cs_label,
+    te_label = x$agg_order
   )
-
   invisible(x)
 }
 
@@ -151,9 +167,13 @@ new_rml_fit <- function(
   framework = NULL,
   features = NULL,
   features_size = NULL,
+  sample_size = NULL,
   block_sampling = NULL
 ) {
-  framework <- match.arg(framework, choices = c("cs", "te", "ct"))
+  framework <- match.arg(
+    framework,
+    choices = c("cross-sectional", "temporal", "cross-temporal")
+  )
   structure(
     list(
       agg_mat = agg_mat,
@@ -165,6 +185,7 @@ new_rml_fit <- function(
       framework = framework,
       features = features,
       features_size = features_size,
+      sample_size = sample_size,
       block_sampling = block_sampling
     ),
     class = "rml_fit"
@@ -175,22 +196,89 @@ new_rml_fit <- function(
 #' @export
 #' @method print summary_rml_fit
 print.summary_rml_fit <- function(x, ...) {
-  cat("----- Reconciled models -----\n")
-  cat("Framework:", x$framework, "\n")
-  cat("Features:", x$features, "\n")
-  cat("Approach:", x$approach, "\n")
-  cat("  Models:", x$n_model, "\n")
+  #cli_rule(right = "FoReco reconciliation summary")
+  frm <- paste0(
+    toupper(substr(x$framework, 1, 1)),
+    substr(x$framework, 2, nchar(x$framework))
+  )
+  cli_alert_info(
+    "{.strong {frm}} reconciliation using Machine Learning methods"
+  )
+
+  method <- c()
+  if (!is.null(x$approach)) {
+    method <- c(
+      method,
+      "Machine Learning approach: {.strong {.code {x$approach}}}"
+    )
+  }
+
+  str_frm <- c()
+  if (!is.null(x$cs_n)) {
+    str_frm <- c(str_frm, "Number of cross-sectional series: {x$cs_n}")
+  }
+
+  if (!is.null(x$te_set)) {
+    str_frm <- c(
+      str_frm,
+      "Temporal orders (k): {x$te_set}"
+    )
+  }
+  str_frm <- c(str_frm, "Number of features: {x$features_size}")
+  str_frm <- c(str_frm, "Training sample size: {x$sample_size}")
+
+  cli_ul(method)
+  cli_ul(str_frm)
+  if (!is.null(x$agg_mat)) {
+    cli_h3("Cross-sectional linear combination matrix")
+    print(x$agg_mat)
+  }
+
+  if (!is.null(x$object)) {
+    cli_h3("Trained models")
+    if (!is.null(x$agg_mat)) {
+      if (!is.null(colnames(x$agg_mat))) {
+        cs_label <- colnames(x$agg_mat)
+      } else {
+        cs_label <- paste0("Bottom series ", 1:length(x))
+      }
+    }
+    print_tree_model(
+      x$object,
+      framework = x$framework,
+      cs_label = cs_label,
+      te_label = x$agg_order
+    )
+  }
+
+  invisible(x)
 }
 
 #' @export
 #' @method summary rml_fit
-summary.rml_fit <- function(object, ...) {
+
+summary.rml_fit <- function(object, keep_models = TRUE, ...) {
   out <- list(
+    agg_mat = object$agg_mat,
     framework = object$framework,
     features = object$features,
     approach = object$approach,
+    features_size = object$features_size,
+    sample_size = object$sample_size,
+    agg_order = object$agg_order,
     n_model = length(object$fit)
   )
+  if (!is.null(object$agg_order)) {
+    out$te_set <- tetools(object$agg_order)$set
+  }
+
+  if (!is.null(object$agg_mat)) {
+    out$cs_n <- sum(dim(object$agg_mat))
+  }
+
+  if (keep_models) {
+    out$object <- object$fit
+  }
   class(out) <- "summary_rml_fit"
   return(out)
 }
@@ -230,4 +318,72 @@ plot.rml_fit <- function(x, which = NULL, ...) {
     title(main = paste("Model", i))
   }
   invisible(x)
+}
+
+style_comment <- cli::make_ansi_style(
+  grDevices::grey(0.4),
+  grey = TRUE,
+  colors = 256
+)
+
+print_tree_model <- function(
+  x,
+  framework,
+  cs_label = NULL,
+  te_label = NULL,
+  features = NULL
+) {
+  n <- length(x)
+
+  cli::cli_text(
+    "<{.strong rml_fit}: {.val {n}} model{?s}, {.emph {framework}} framework>"
+  )
+  if (framework == "cross-sectional") {
+    list_label <- cs_label
+  } else if (framework == "temporal") {
+    if (is.null(te_label)) {
+      list_label <- paste0("High-frequency level")
+    } else {
+      list_label <- paste0("High-frequency level (m = ", te_label, ")")
+    }
+
+    if (length(x) > 1) {
+      list_label <- paste0(list_label, ", forecast horizon ", 1:length(x))
+    }
+  } else if (framework == "cross-temporal") {
+    list_label <- cs_label
+    if (is.null(te_label)) {
+      list_label <- paste0(list_label, " at high-frequency level")
+    } else {
+      list_label <- paste0(
+        list_label,
+        " at high-frequency level (m = ",
+        te_label,
+        ")"
+      )
+    }
+
+    if (length(list_label) < length(x)) {
+      fh <- length(x) / length(list_label)
+      list_label <- paste0(
+        rep(list_label, each = fh),
+        rep(paste0(", forecast horizon ", seq_len(fh)), length(list_label))
+      )
+    }
+  }
+
+  check <- rep(" \u251C\u2500", length(x))
+  check[length(check)] <- " \u2514\u2500"
+  class_objects <- sapply(x, function(m) {
+    paste0("<", class(m)[1], ">")
+  })
+  cat(paste0(
+    check,
+    " ",
+    list_label,
+    ": ",
+    style_comment(class_objects),
+    "\n",
+    collapse = ""
+  ))
 }

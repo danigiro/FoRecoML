@@ -11,12 +11,14 @@ extract_reconciled_ml(reco)
 (e.g., the result of \link{csrml}, \link{terml} and \link{ctrml}).}
 }
 \value{
-A named list with reconciliation information:
-\item{\code{sel_mat}}{Features used (e.g., the selected feature
-matrix or indices).}
-\item{\code{fit}}{List of reconciled models.}
-\item{\code{approach}}{The learning approach used (e.g., \code{"xgboost"},
-\code{"lightgbm"}, \code{"randomForest"}, \code{"mlr3"}).}
+An \code{rml_fit} object (S3 class) that extends the reconciled model(s)
+with reconciliation metadata. This object lets you pre-train the
+reconciliation approach before base forecasts are available: the
+fitted result can then be passed to the \code{fit} argument of \link{csrml},
+\link{terml} or \link{ctrml} to reconcile new forecasts without refitting.
+While the underlying list of models can be retrieved by extracting
+the \code{fit} element, the object is primarily intended to be used
+as-is.
 }
 \description{
 Extract the fitted reconciled model(s) from a reconciliation
@@ -62,6 +64,7 @@ reco <- csrml(base = base, hat = hat, obs = obs, agg_mat = agg_mat)
 
 mdl <- extract_reconciled_ml(reco)
 mdl
+summary(mdl)
 }
 
 }

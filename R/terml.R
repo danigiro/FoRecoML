@@ -193,7 +193,10 @@ terml <- function(
         call = NULL
       )
     } else if (length(obs) %% m != 0) {
-      cli_abort("Incorrect {.arg obs} length.", call = NULL)
+      cli_abort(
+        'The length of {.arg obs} must be a multiple of {m}, but it is {length(obs)}.',
+        call = NULL
+      )
     } else {
       if (!grepl("mfh", features)) {
         obs <- cbind(obs)
@@ -208,7 +211,10 @@ terml <- function(
         call = NULL
       )
     } else if (length(hat) %% kt != 0) {
-      cli_abort("Incorrect {.arg hat} length.", call = NULL)
+      cli_abort(
+        'The length of {.arg hat} must be a multiple of {kt}, but it is {length(hat)}.',
+        call = NULL
+      )
     } else {
       if (!grepl("mfh", features)) {
         hat <- input2rtw(hat, kset)
@@ -247,7 +253,10 @@ terml <- function(
         block_sampling <- tmp$dim[["m"]]
       },
       {
-        cli_abort("Unknown {.arg features} option.", call = NULL)
+        cli_abort(
+          '{.arg features} = {.val {features}} is not a valid option.',
+          call = NULL
+        )
       }
     )
     attr(sel_mat, "sel_method") <- features
@@ -267,11 +276,17 @@ terml <- function(
     }
   } else {
     if (!inherits(fit, "rml_fit")) {
-      cli_abort("Incorrect {.arg fit} object.", call = NULL)
+      cli_abort(
+        "{.arg fit} must be an {.cls rml_fit} object, not {.obj_type_friendly {fit}}.",
+        call = NULL
+      )
     }
 
-    if (fit$framework != "te") {
-      cli_abort("Incompatible {.arg fit} framework.", call = NULL)
+    if (fit$framework != "temporal") {
+      cli_abort(
+        "{.arg fit} was trained for the {.val {fit$framework}} framework, but a {.val temporal} one is required.",
+        call = NULL
+      )
     }
 
     agg_order <- fit$agg_order
@@ -295,7 +310,10 @@ terml <- function(
       call = NULL
     )
   } else if (length(base) %% kt != 0) {
-    cli_abort("Incorrect {.arg base} length.", call = NULL)
+    cli_abort(
+      'The length of {.arg base} must be a multiple of {kt}, but it is {length(base)}.',
+      call = NULL
+    )
   } else {
     h <- length(base) / kt
     if (!grepl("mfh", features)) {
@@ -335,12 +353,12 @@ terml <- function(
     tew = tew,
     sel_mat = obj$sel_mat,
     approach = approach,
-    framework = "te",
+    framework = "temporal",
     features = features,
     features_size = features_size,
+    sample_size = NROW(hat),
     block_sampling = block_sampling
   )
-
   attr(reco_mat, "fit") <- NULL
 
   reco_mat <- tebu(
@@ -373,8 +391,9 @@ terml <- function(
 #'           approach = "randomForest", params = NULL, tuning = NULL)
 #'
 #' @return
-#'   - [terml_fit] returns a fitted object that can be reused for
-#'     reconciliation on new base forecasts.
+#'   - [terml_fit] returns a `rml_fit` object that can be reused for
+#'     reconciliation on new base forecasts
+#'     (see [extract_reconciled_ml] for more details).
 #'
 #' @rdname terml
 #'
@@ -410,7 +429,10 @@ terml_fit <- function(
   if (missing(obs)) {
     cli_abort("Argument {.arg obs} is missing, with no default.", call = NULL)
   } else if (length(obs) %% m != 0) {
-    cli_abort("Incorrect {.arg obs} length.", call = NULL)
+    cli_abort(
+      'The length of {.arg obs} must be a multiple of {m}, but it is {length(obs)}.',
+      call = NULL
+    )
   } else {
     if (!grepl("mfh", features)) {
       obs <- cbind(obs)
@@ -422,7 +444,10 @@ terml_fit <- function(
   if (missing(hat)) {
     cli_abort("Argument {.arg hat} is missing, with no default.", call = NULL)
   } else if (length(hat) %% kt != 0) {
-    cli_abort("Incorrect {.arg hat} length.", call = NULL)
+    cli_abort(
+      'The length of {.arg hat} must be a multiple of {kt}, but it is {length(hat)}.',
+      call = NULL
+    )
   } else {
     if (!grepl("mfh", features)) {
       hat <- input2rtw(hat, kset)
@@ -458,7 +483,10 @@ terml_fit <- function(
       block_sampling <- tmp$dim[["m"]]
     },
     {
-      cli_abort("Unknown {.arg features} option.", call = NULL)
+      cli_abort(
+        '{.arg features} = {.val {features}} is not a valid option.',
+        call = NULL
+      )
     }
   )
   attr(sel_mat, "sel_method") <- features
@@ -495,11 +523,11 @@ terml_fit <- function(
     tew = tew,
     sel_mat = obj$sel_mat,
     approach = approach,
-    framework = "te",
+    framework = "temporal",
     features = features,
     features_size = NCOL(hat),
+    sample_size = NROW(hat),
     block_sampling = block_sampling
   )
-
   return(obj)
 }

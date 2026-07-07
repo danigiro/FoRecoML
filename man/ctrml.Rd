@@ -100,8 +100,9 @@ reconciliation settings (see, \link[FoReco:foreco-class]{FoReco::new_foreco_clas
 }
 
 \itemize{
-\item \link{ctrml_fit} returns a fitted object that can be reused for
-reconciliation on new base forecasts.
+\item \link{ctrml_fit} returns a \code{rml_fit} object that can be reused for
+reconciliation on new base forecasts
+(see \link{extract_reconciled_ml} for more details).
 }
 }
 \description{

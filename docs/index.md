@@ -4,7 +4,7 @@
 [![CRAN
 status](https://www.r-pkg.org/badges/version/FoRecoML)](https://CRAN.R-project.org/package=FoRecoML)
 [![devel
-version](https://img.shields.io/badge/devel%20version-1.1.0-blue.svg)](https://github.com/danigiro/FoRecoML)
+version](https://img.shields.io/badge/devel%20version-1.1.0.9000-blue.svg)](https://github.com/danigiro/FoRecoML)
 [![License:
 GPL-3](https://img.shields.io/badge/license-GPL--3-forestgreen.svg)](https://cran.r-project.org/web/licenses/GPL-3)
 
@@ -26,12 +26,6 @@ The core functions for reconciliation are:
 
 - [`ctrml()`](https://danigiro.github.io/FoRecoML/reference/ctrml.md)
   Cross-temporal Reconciliation with Machine Learning
-
-- [`extract_reconciled_ml()`](https://danigiro.github.io/FoRecoML/reference/extract_reconciled_ml.md)
-  Extraction of the fitted machine learning model used for forecast
-  reconciliation from the output of one of the reconciliation function.
-  The fitted machine learning model can be reused for different sets of
-  data with the same hierarchical structure.
 
 Machine learning models that can be used with `FoRecoML` include random
 forest (`randomForest`), extreme gradient boosting (`xgboost`), light

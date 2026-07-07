@@ -121,8 +121,10 @@ csrml_fit(hat, obs, agg_mat, features = "all", approach = "randomForest",
 
 &nbsp;
 
-- csrml_fit returns a fitted object that can be reused for
-  reconciliation on new base forecasts.
+- csrml_fit returns a `rml_fit` object that can be reused for
+  reconciliation on new base forecasts (see
+  [extract_reconciled_ml](https://danigiro.github.io/FoRecoML/reference/extract_reconciled_ml.md)
+  for more details).
 
 ## References
 
