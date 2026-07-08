@@ -1,5 +1,21 @@
 # Changelog
 
+## FoRecoML 1.1.1
+
+- Reworked the [`print()`](https://rdrr.io/r/base/print.html) and
+  [`summary()`](https://rdrr.io/r/base/summary.html) methods for
+  `rml_fit` objects, which now return a more informative, structured
+  overview of the fitted reconciliation (framework, machine-learning
+  approach, problem dimensions, features, training sample size,
+  combination matrix and trained models).
+- [`csrml()`](https://danigiro.github.io/FoRecoML/reference/csrml.md),
+  [`terml()`](https://danigiro.github.io/FoRecoML/reference/terml.md)
+  and
+  [`ctrml()`](https://danigiro.github.io/FoRecoML/reference/ctrml.md)
+  now validate their arguments more strictly and fail with informative
+  error messages that state the expected value and report the one
+  actually supplied.
+
 ## FoRecoML 1.1.0
 
 CRAN release: 2026-06-23

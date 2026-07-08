@@ -2,7 +2,7 @@ pandoc: 3.8.3
 pkgdown: 2.2.0
 pkgdown_sha: ~
 articles: {}
-last_built: 2026-07-07T15:59Z
+last_built: 2026-07-08T09:03Z
 urls:
   reference: https://danigiro.github.io/FoRecoML/reference
   article: https://danigiro.github.io/FoRecoML/articles
