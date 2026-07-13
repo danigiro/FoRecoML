@@ -1,3 +1,5 @@
+# FoRecoML (development version)
+
 # FoRecoML 1.1.1
 
 * Reworked the `print()` and `summary()` methods for `rml_fit` objects, which now return a more informative, structured overview of the fitted reconciliation (framework, machine-learning approach, problem dimensions, features, training sample size, combination matrix and trained models).
